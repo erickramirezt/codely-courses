@@ -26,15 +26,15 @@ export class Course extends AggregateRoot<CoursePrimitives> {
     )
   }
 
-  idValue(): string {
+  get idValue(): string {
 		return this.id.value;
 	}
 
-	titleValue(): string {
+	get titleValue(): string {
 		return this.title.value;
 	}
 
-	imageUrlValue(): string {
+	get imageUrlValue(): string {
 		return this.imageUrl.value;
 	}
 
