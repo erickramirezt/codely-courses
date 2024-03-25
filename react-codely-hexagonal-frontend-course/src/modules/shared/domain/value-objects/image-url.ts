@@ -14,6 +14,6 @@ export class ImageUrl extends StringValueObject {
   }
 
   static invalidMessage(value: string) {
-    return `The image url [${value} is invalid.`
+    return `The image url [${value}] is invalid.`
   }
 }

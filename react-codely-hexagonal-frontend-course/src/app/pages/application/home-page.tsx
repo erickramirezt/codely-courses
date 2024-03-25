@@ -1,14 +1,20 @@
-import { Button } from '@/components/ui/button'
-import { useState } from 'react'
+import { CreateCourseForm } from '@/app/sections/courses/create/create-course-form'
+import { CoursesList } from '@/app/sections/courses/get-all/courses-list'
+import { CoursesContextProvider } from '@/app/sections/courses/shared/course-context'
+import { LocalStorageCourseRepository } from '@/modules/courses/infrastructure/local-storage-course-repository'
 
 export function HomePage() {
-  const [count, setCount] = useState(0)
+  const repository = new LocalStorageCourseRepository()
 
   return (
-    <>
-      <h1>Home</h1>
-      <p>Welcome to the home page</p>
-      <Button onClick={() => setCount((state) => state + 1)}>{count}</Button>
-    </>
+    <CoursesContextProvider
+      repository={repository}
+    >
+      <main>
+        <h1>Codely</h1>
+        <CoursesList />
+        <CreateCourseForm />
+      </main>
+    </CoursesContextProvider>
   )
 }

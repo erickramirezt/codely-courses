@@ -11,7 +11,7 @@ export class Uuid extends StringValueObject {
   }
 
   private validateUuid (value: string): void {
-    if (this.validUuidRegexExp.test(value)) {
+    if (!this.validUuidRegexExp.test(value)) {
       throw new InternalServerError(this.invalidUuidMessage(value))
     }
   }
