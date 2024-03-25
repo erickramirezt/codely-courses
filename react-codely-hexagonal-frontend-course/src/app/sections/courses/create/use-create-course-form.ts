@@ -1,12 +1,8 @@
 import { useState } from 'react'
 import { CreateCourseFormData, useCoursesContext } from '../shared/course-context'
+import { FormStatus } from '../../shared/use-form-data'
 
-export const enum FormStatus {
-  Loading,
-  Success,
-  Error,
-  Initial,
-}
+
 
 export function useCreateCourseForm(): {
   formStatus: FormStatus

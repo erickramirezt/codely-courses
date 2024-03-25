@@ -1,31 +1,31 @@
 import { Course } from '@/modules/courses/domain/model/course'
-import { FormStatus } from '../create/use-create-course-form'
 import { create } from 'zustand'
 import { LocalStorageCourseRepository } from '@/modules/courses/infrastructure/local-storage-course-repository'
 import { AllCoursesGetter } from '@/modules/courses/application/get-all/all-courses-getter'
+import { ActionStatus } from '../../shared/use-form-data'
 
 interface GetAllCoursesState {
-  formStatus: FormStatus
+  actionStatus: ActionStatus
   error: string
   courses: Course[]
-  getCourses: () => Promise<void>
+  getAllCourses: () => Promise<void>
 }
 
 export const useGetAllCourses = create<GetAllCoursesState>((set) => {
   return {
     error: '',
-    formStatus: FormStatus.Initial,
+    actionStatus: ActionStatus.Initial,
     courses: [],
-    getCourses: async () => {
-      set({ formStatus: FormStatus.Loading })
+    getAllCourses: async () => {
+      set({ actionStatus: ActionStatus.Loading })
 
       try {
         const repository = new LocalStorageCourseRepository()
         const allCoursesGetter = new AllCoursesGetter(repository)
         const courses = await allCoursesGetter.run()
-        set({ formStatus: FormStatus.Success, courses })
+        set({ actionStatus: ActionStatus.Success, courses })
       } catch (error) {
-        set({ formStatus: FormStatus.Error, error: (error as Error).message })
+        set({ actionStatus: ActionStatus.Error, error: (error as Error).message })
       }
     },
   }

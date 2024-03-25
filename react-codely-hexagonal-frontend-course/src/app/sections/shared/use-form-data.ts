@@ -19,3 +19,10 @@ export const useFormData = <T>(
 
   return { formData, updateFormData, resetFormData }
 }
+
+export const enum ActionStatus {
+  Loading,
+  Success,
+  Error,
+  Initial,
+}
