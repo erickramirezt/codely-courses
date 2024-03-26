@@ -2,6 +2,7 @@ import { BadRequestError } from '@/modules/shared/domain/errors/bad-request-erro
 import { StringValueObject } from '@/modules/shared/domain/value-objects/value-object/string-value-object'
 
 export class CourseTitle extends StringValueObject {
+  static readonly MIN_COURSE_LENGTH = 5
   static readonly MAX_COURSE_LENGTH = 40
 
   constructor(readonly value: string) {
@@ -12,10 +13,13 @@ export class CourseTitle extends StringValueObject {
   }
 
   static isValid(value: string) {
-    return value.length <= CourseTitle.MAX_COURSE_LENGTH
+    return (
+      value.length <= CourseTitle.MAX_COURSE_LENGTH &&
+      value.length >= CourseTitle.MIN_COURSE_LENGTH
+    )
   }
 
   static invalidMessage(value: string) {
-    return `The title [${value}] is invalid. It must be less than ${CourseTitle.MAX_COURSE_LENGTH} characters.`
+    return `The title [${value}] is invalid. It must be less than ${CourseTitle.MAX_COURSE_LENGTH} characters and more than ${CourseTitle.MIN_COURSE_LENGTH}.`
   }
 }
