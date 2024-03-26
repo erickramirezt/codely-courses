@@ -2,16 +2,19 @@ import { faker } from '@faker-js/faker'
 
 export const MotherCreator = {
   string: {
-    uuid () {
+    uuid() {
       return faker.string.uuid()
     },
-    word ({ max, min = 1 }: { min?: number, max: number }) {
+    word({ max, min = 1 }: { min?: number; max: number }) {
       return faker.word.sample({ length: { max, min } })
-    }
+    },
+    words({ number }: { number: number }) {
+      return faker.word.words(number)
+    },
   },
   image: {
     url() {
       return faker.image.url()
-    }
-  }
+    },
+  },
 }

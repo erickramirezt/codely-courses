@@ -17,9 +17,6 @@ export const CourseTitleMother = {
   },
 
   createTooLong(): string {
-    return StringMother.word({
-      min: CourseTitle.MAX_COURSE_LENGTH + 1,
-      max: CourseTitle.MAX_COURSE_LENGTH + 10,
-    })
+    return StringMother.words({ number: 7 })
   },
 }
