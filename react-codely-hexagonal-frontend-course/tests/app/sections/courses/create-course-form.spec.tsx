@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
@@ -16,7 +16,22 @@ describe('create course form component', () => {
       </CoursesContextProvider>
     )
 
-    const titleInput = screen.getByLabelText(/title/i)
-    userEvent.type(titleInput, "Awesome Hexagonal Architecture")
+    const user = userEvent.setup()
+
+    const titleInput = screen.getByLabelText(/course title/i)
+    await user.type(titleInput, 'Awesome Hexagonal Architecture')
+
+    const imageUrlInput = screen.getByLabelText(/image url/i)
+    await user.type(imageUrlInput, 'https://acerosrmspa.cl/wp-content/uploads/2023/10/cropped-cropped-logo_final-e1698276884150.jpg')
+
+    const submitButton = screen.getByRole('button', { name: /create course/i })
+
+    userEvent.click(submitButton)
+
+    const successMessage = await screen.findByRole('heading', {
+      name: /course created/i,
+    })
+
+    expect(successMessage).toBeTruthy()
   })
 })

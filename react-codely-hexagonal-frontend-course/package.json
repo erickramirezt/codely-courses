@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test:unit": "vitest modules",
-    "test:features": "playwright test",
+    "test:sections": "vitest app/sections",
+    "test:features": "playwright test app/pages",
     "test": "npm run test:unit && npm run test:features",
     "preview": "vite preview"
   },
