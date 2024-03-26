@@ -3,8 +3,8 @@ import { CreateCourseFormData } from '../shared/course-context'
 import { ActionStatus, useFormData } from '../../shared/use-form-data'
 import { CourseTitle } from '@/modules/courses/domain/value-objects/course-title'
 import { CourseImageUrl } from '@/modules/courses/domain/value-objects/course-image-url'
-import { useCreateCourse } from './use-create-course'
-import { useGetAllCourses } from '../get-all/use-get-all-courses'
+import { useCreateCourseForm } from './use-create-course-form'
+import { useGetCourses } from '../get-all/use-get-all-courses'
 
 const initialState: CreateCourseFormData = {
   title: '',
@@ -13,12 +13,10 @@ const initialState: CreateCourseFormData = {
 
 export function CreateCourseForm() {
   const { formData, resetFormData, updateFormData } = useFormData(initialState)
-  const createCourse = useCreateCourse((state) => state.createCourse)
-  const formStatus = useCreateCourse((state) => state.formStatus)
-  const resetFormStatus = useCreateCourse((state) => state.resetFormStatus)
-  const error = useCreateCourse((state) => state.error)
-  const getAllCourses = useGetAllCourses((state) => state.getAllCourses)
+  const { formStatus, error, resetFormStatus, submitForm } =
+    useCreateCourseForm()
   const [errors, setErrors] = useState(initialState)
+  const { getCourses } = useGetCourses()
 
   useEffect(() => {
     const isTitleValid = CourseTitle.isValid(formData.title)
@@ -35,8 +33,8 @@ export function CreateCourseForm() {
   const handleSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault()
 
-    await createCourse(formData)
-    await getAllCourses()
+    await submitForm(formData)
+    await getCourses()
   }
 
   return (

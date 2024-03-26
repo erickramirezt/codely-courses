@@ -1,32 +1,27 @@
-import { Course } from '@/modules/courses/domain/model/course'
-import { create } from 'zustand'
-import { LocalStorageCourseRepository } from '@/modules/courses/infrastructure/local-storage-course-repository'
-import { AllCoursesGetter } from '@/modules/courses/application/get-all/all-courses-getter'
-import { ActionStatus } from '../../shared/use-form-data'
+import { useState } from "react";
+import { ActionStatus } from "../../shared/use-form-data";
+import { useCoursesContext } from "../shared/course-context";
 
-interface GetAllCoursesState {
+export function useGetCourses(): {
   actionStatus: ActionStatus
+  getCourses: () => Promise<void>
   error: string
-  courses: Course[]
-  getAllCourses: () => Promise<void>
-}
+} {
+  const [actionStatus, setActionStatus] = useState<ActionStatus>(ActionStatus.Initial)
+  const [error, setError] = useState<string>('')
+  const { getAllCourses } = useCoursesContext()
 
-export const useGetAllCourses = create<GetAllCoursesState>((set) => {
-  return {
-    error: '',
-    actionStatus: ActionStatus.Initial,
-    courses: [],
-    getAllCourses: async () => {
-      set({ actionStatus: ActionStatus.Loading })
+  async function getCourses() {
+    setActionStatus(ActionStatus.Loading)
 
-      try {
-        const repository = new LocalStorageCourseRepository()
-        const allCoursesGetter = new AllCoursesGetter(repository)
-        const courses = await allCoursesGetter.run()
-        set({ actionStatus: ActionStatus.Success, courses })
-      } catch (error) {
-        set({ actionStatus: ActionStatus.Error, error: (error as Error).message })
-      }
-    },
+    try {
+      await getAllCourses()
+      setActionStatus(ActionStatus.Success)
+    } catch (error) {
+      setActionStatus(ActionStatus.Error)
+      setError((error as Error).message)
+    }
   }
-})
+
+  return { actionStatus, getCourses, error }
+}
