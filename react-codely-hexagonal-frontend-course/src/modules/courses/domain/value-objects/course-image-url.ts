@@ -1,7 +1,7 @@
 import { ImageUrl } from "@/modules/shared/domain/value-objects/image-url";
 
 export class CourseImageUrl extends ImageUrl {
-  constructor(value: string) {
+  constructor(readonly value: string) {
     super(value);
   }
 }

@@ -10,7 +10,9 @@ export class ImageUrl extends StringValueObject {
   }
 
   static isValid(value: string) {
-    return /^https?:\/\/.*\.(png|jpg|jpeg|gif)$/.test(value)
+    return /^(http|https):\/\/[^ "]+$/.test(
+      value
+    )
   }
 
   static invalidMessage(value: string) {

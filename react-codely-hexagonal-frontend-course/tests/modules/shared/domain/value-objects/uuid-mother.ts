@@ -3,7 +3,7 @@ import { MotherCreator } from './mother-creator/mother-creator'
 import { StringMother } from './mother-creator/string-mother'
 
 export const UuidMother = {
-  create(value: string) {
+  create(value?: string) {
     return new Uuid(value ?? MotherCreator.string.uuid())
   },
 

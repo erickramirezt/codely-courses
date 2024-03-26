@@ -1,7 +1,7 @@
 import { Uuid } from "@/modules/shared/domain/value-objects/uuid";
 
 export class CourseId extends Uuid {
-  constructor(value: string) {
+  constructor(readonly value: string) {
     super(value);
   }
 }

@@ -8,5 +8,10 @@ export const MotherCreator = {
     word ({ max, min = 1 }: { min?: number, max: number }) {
       return faker.word.sample({ length: { max, min } })
     }
+  },
+  image: {
+    url() {
+      return faker.image.url()
+    }
   }
 }

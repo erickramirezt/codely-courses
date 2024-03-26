@@ -6,6 +6,8 @@ import { LocalStorageCourseRepository } from '../../../../src/modules/courses/in
 import { CoursesContextProvider } from '../../../../src/app/sections/courses/shared/course-context'
 import React from 'react'
 import { CreateCourseForm } from '../../../../src/app/sections/courses/create/create-course-form'
+import { CourseTitleMother } from '../../../modules/courses/domain/value-objects/course-title.mother'
+import { CourseImageUrlMother } from '../../../modules/courses/domain/value-objects/course-image-url-mother'
 
 describe('create course form component', () => {
   it('displays success message when data is correct', async () => {
@@ -19,10 +21,13 @@ describe('create course form component', () => {
     const user = userEvent.setup()
 
     const titleInput = screen.getByLabelText(/course title/i)
-    await user.type(titleInput, 'Awesome Hexagonal Architecture')
+    await user.type(titleInput, CourseTitleMother.create().value)
 
     const imageUrlInput = screen.getByLabelText(/image url/i)
-    await user.type(imageUrlInput, 'https://acerosrmspa.cl/wp-content/uploads/2023/10/cropped-cropped-logo_final-e1698276884150.jpg')
+    await user.type(
+      imageUrlInput,
+      CourseImageUrlMother.create().value
+    )
 
     const submitButton = screen.getByRole('button', { name: /create course/i })
 
