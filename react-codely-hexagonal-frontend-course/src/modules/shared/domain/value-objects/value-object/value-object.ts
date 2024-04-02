@@ -25,6 +25,6 @@ export abstract class ValueObject<T extends Primitives> {
   }
 
   invalidValueMessage (value: T): string {
-    return `El valor [${value.toString()}] no es un valor válido.`
+    return `El valor [${value}] no es un valor válido.`
   }
 }
