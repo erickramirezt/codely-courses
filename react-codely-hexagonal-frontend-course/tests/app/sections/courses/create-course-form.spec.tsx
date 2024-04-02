@@ -8,8 +8,9 @@ import { CreateCourseForm } from '../../../../src/app/sections/courses/create/cr
 import { CourseTitleMother } from '../../../modules/courses/domain/value-objects/course-title.mother'
 import { CourseImageUrlMother } from '../../../modules/courses/domain/value-objects/course-image-url-mother'
 import { CourseTitle } from '../../../../src/modules/courses/domain/value-objects/course-title'
-import { MockCourseRepository } from '../../../modules/courses/mocks/mock-course-repository'
+
 import { ImageUrl } from '../../../../src/modules/shared/domain/value-objects/image-url'
+import { MockCourseRepository } from '../../../modules/courses/infrastructure/persistence/mocks/mock-course-repository'
 
 describe('create course form component', () => {
   it('displays success message when data is correct', async () => {

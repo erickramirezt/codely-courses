@@ -1,7 +1,7 @@
 import { vi } from "vitest";
-import { Course } from "../../../../src/modules/courses/domain/model/course";
-import { CourseRepository } from "../../../../src/modules/courses/domain/repository/course-repository";
-import { CourseId } from "../../../../src/modules/courses/domain/value-objects/course-id";
+import { Course } from "../../../../../../src/modules/courses/domain/model/course";
+import { CourseRepository } from "../../../../../../src/modules/courses/domain/repository/course-repository";
+import { CourseId } from "../../../../../../src/modules/courses/domain/value-objects/course-id";
 
 export class MockCourseRepository implements CourseRepository {
   private readonly mockSave = vi.fn(); 
