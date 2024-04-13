@@ -4,7 +4,7 @@ import {
 } from '../../../../../src/modules/courses/domain/model/course'
 import { CourseIdMother } from '../value-objects/course-id-mother'
 import { CourseImageUrlMother } from '../value-objects/course-image-url-mother'
-import { CourseTitleMother } from '../value-objects/course-title.mother'
+import { CourseTitleMother } from '../value-objects/course-title-mother'
 
 export const CourseMother = {
   create(params?: Partial<CoursePrimitives>): Course {

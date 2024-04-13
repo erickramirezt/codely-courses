@@ -10,9 +10,7 @@ export class ApiCourseRepository implements CourseRepository {
     await fetch(`${ApiCourseRepository.baseUrl}`, {
       method: 'POST',
       body: JSON.stringify({
-        id: coursePrimitives.id,
-        name: coursePrimitives.title,
-        imageUrl: coursePrimitives.imageUrl,
+        ...coursePrimitives,
       }),
     })
   }
