@@ -1,3 +1,5 @@
+import { AggregateRoot } from '../../../../shared/domain/model/aggregate-root'
+import { UserRegisteredDomainEvent } from '../events/user-registered-domain-event'
 import { UserEmail } from '../value-objects/user-email'
 import { UserId } from '../value-objects/user-id'
 import { UserName } from '../value-objects/user-name'
@@ -10,13 +12,30 @@ export interface UserPrimitives {
   profilePicture: string
 }
 
-export class User {
+export class User extends AggregateRoot<UserPrimitives> {
   private constructor (
     readonly id: UserId,
     private readonly name: UserName,
     private readonly email: UserEmail,
     private readonly profilePicture: UserProfilePicture
-  ) {}
+  ) {
+    super()
+  }
+
+  static create (primitives: UserPrimitives): User {
+    const user = User.fromPrimitives(primitives)
+
+    user.record(
+      new UserRegisteredDomainEvent(
+        primitives.id,
+        primitives.name,
+        primitives.email,
+        primitives.profilePicture
+      )
+    )
+
+    return user
+  }
 
   static fromPrimitives (primitives: UserPrimitives): User {
     return new User(

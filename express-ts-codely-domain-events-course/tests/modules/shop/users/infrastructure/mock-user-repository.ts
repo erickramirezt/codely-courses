@@ -7,7 +7,7 @@ export class MockUserRepository implements UserRepository {
   private readonly mockSearch = jest.fn()
 
   async save (user: User): Promise<void> {
-    expect(this.mockSave).toHaveBeenCalledWith(user)
+    expect(this.mockSave).toHaveBeenCalledWith(user.toPrimitives())
   }
 
   async search (id: UserId): Promise<User | null> {
@@ -17,16 +17,16 @@ export class MockUserRepository implements UserRepository {
   }
 
   shouldSave (user: User): void {
-    this.mockSave(user)
+    this.mockSave(user.toPrimitives())
   }
 
   shouldSearch (user: User): void {
     this.mockSearch(user.id)
-    this.mockSearch.mockReturnValue(user)
+    this.mockSearch.mockReturnValueOnce(user)
   }
 
   shouldNotSearch (id: UserId): void {
     this.mockSearch(id)
-    this.mockSearch.mockReturnValue(null)
+    this.mockSearch.mockReturnValueOnce(null)
   }
 }

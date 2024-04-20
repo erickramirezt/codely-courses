@@ -15,7 +15,7 @@ export class UserRegister {
     email: string,
     profilePicture: string
   ): Promise<void> {
-    const user = User.fromPrimitives({ id, name, email, profilePicture })
+    const user = User.create({ id, name, email, profilePicture })
 
     await this.repository.save(user)
     await this.eventBus.publish([

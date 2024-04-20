@@ -22,8 +22,8 @@ describe('UserRegister should', () => {
 
     await userRegister.run(
       expectedUserPrimitives.id,
-      expectedUserPrimitives.email,
       expectedUserPrimitives.name,
+      expectedUserPrimitives.email,
       expectedUserPrimitives.profilePicture
     )
   })

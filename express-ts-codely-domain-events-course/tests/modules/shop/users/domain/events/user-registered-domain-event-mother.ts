@@ -17,8 +17,8 @@ export const UserRegisteredDomainEventMother = {
 
     return new UserRegisteredDomainEvent(
       primitives.id,
-      primitives.email,
       primitives.name,
+      primitives.email,
       primitives.profilePicture
     )
   }
