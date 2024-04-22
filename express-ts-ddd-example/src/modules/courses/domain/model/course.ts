@@ -10,38 +10,27 @@ export interface CoursePrimitives {
 }
 
 export class Course extends AggregateRoot<CoursePrimitives> {
-  readonly id: CourseId
-  readonly name: CourseName
-  readonly duration: CourseDuration
-
-  constructor ({
-    id,
-    name,
-    duration
-  }: {
-    id: CourseId
-    name: CourseName
-    duration: CourseDuration
-  }) {
+  constructor (
+    readonly id: CourseId,
+    readonly name: CourseName,
+    readonly duration: CourseDuration
+  ) {
     super()
-    this.id = id
-    this.name = name
-    this.duration = duration
   }
 
-  static fromPrimitives (plainData: {
+  static fromPrimitives (primitives: {
     id: string
     name: string
     duration: string
   }): Course {
-    return new Course({
-      id: new CourseId(plainData.id),
-      name: new CourseName(plainData.name),
-      duration: new CourseDuration(plainData.duration)
-    })
+    return new Course(
+      new CourseId(primitives.id),
+      new CourseName(primitives.name),
+      new CourseDuration(primitives.duration)
+    )
   }
 
-  public toPrimitives (): any {
+  public toPrimitives (): CoursePrimitives {
     return {
       id: this.id.value,
       name: this.name.value,

@@ -1,4 +1,4 @@
-import { type CourseCreatorRequest } from '../../../../../src/modules/courses/application/create/course-creator-request'
+import { type CourseCreatorRequest } from '../../../../../src/modules/courses/application/create/course-creator'
 import { Course } from '../../../../../src/modules/courses/domain/model/course'
 import { type CourseDuration } from '../../../../../src/modules/courses/domain/value-objects/course-duration'
 import { type CourseId } from '../../../../../src/modules/courses/domain/value-objects/course-id'
@@ -9,7 +9,11 @@ import { CourseNameMother } from '../value-objects/course-name-mother'
 
 export const CourseMother = {
   create (id: CourseId, name: CourseName, duration: CourseDuration) {
-    return new Course({ id, name, duration })
+    return Course.fromPrimitives({
+      id: id.value,
+      name: name.value,
+      duration: duration.value
+    })
   },
 
   fromRequest (request: CourseCreatorRequest) {
@@ -22,9 +26,9 @@ export const CourseMother = {
 
   random (): Course {
     return this.create(
-      CourseIdMother.random(),
-      CourseNameMother.random(),
-      CourseDurationMother.random()
+      CourseIdMother.create(),
+      CourseNameMother.create(),
+      CourseDurationMother.create()
     )
   }
 }

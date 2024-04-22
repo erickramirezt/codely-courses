@@ -1,10 +1,11 @@
 import { Course } from '../../domain/model/course'
 import { type CourseRepository } from '../../domain/repository/course-repository'
-import { CourseDuration } from '../../domain/value-objects/course-duration'
-import { CourseId } from '../../domain/value-objects/course-id'
-import { CourseName } from '../../domain/value-objects/course-name'
-import { type CourseCreatorRequest } from './course-creator-request'
 
+export interface CourseCreatorRequest {
+  id: string
+  name: string
+  duration: string
+}
 export class CourseCreator {
   private readonly repository: CourseRepository
 
@@ -13,11 +14,7 @@ export class CourseCreator {
   }
 
   async run (request: CourseCreatorRequest): Promise<void> {
-    const course = new Course({
-      id: new CourseId(request.id),
-      name: new CourseName(request.name),
-      duration: new CourseDuration(request.duration)
-    })
+    const course = Course.fromPrimitives({ ...request })
     await this.repository.save(course)
   }
 }

@@ -1,4 +1,4 @@
-import { type CourseCreatorRequest } from '../../../../../src/modules/courses/application/create/course-creator-request'
+import { type CourseCreatorRequest } from '../../../../../src/modules/courses/application/create/course-creator'
 import { type CourseDuration } from '../../../../../src/modules/courses/domain/value-objects/course-duration'
 import { type CourseId } from '../../../../../src/modules/courses/domain/value-objects/course-id'
 import { type CourseName } from '../../../../../src/modules/courses/domain/value-objects/course-name'
@@ -16,17 +16,17 @@ export const CreateCourseRequestMother = {
 
   random (): CourseCreatorRequest {
     return this.create(
-      CourseIdMother.random(),
-      CourseNameMother.random(),
-      CourseDurationMother.random()
+      CourseIdMother.create(),
+      CourseNameMother.create(),
+      CourseDurationMother.create()
     )
   },
 
   invalidRequest (): CourseCreatorRequest {
     return this.create(
-      CourseIdMother.random(),
+      CourseIdMother.create(),
       CourseNameMother.create(CourseNameMother.invalidName()),
-      CourseDurationMother.random()
+      CourseDurationMother.create()
     )
   }
 }

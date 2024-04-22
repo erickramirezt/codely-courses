@@ -11,14 +11,14 @@ export class FileCourseRepository implements CourseRepository {
   async save (course: Course): Promise<void> {
     await fs.promises.writeFile(
       this.filePath(course.id.value),
-      serialize(course)
+      serialize(course.toPrimitives())
     )
   }
 
   async search (courseId: CourseId): Promise<Course> {
     const courseData = await fs.promises.readFile(this.filePath(courseId.value))
     const { id, name, duration } = deserialize(courseData)
-    return new Course({ id, name, duration })
+    return Course.fromPrimitives({ id, name, duration })
   }
 
   private filePath (id: string): string {

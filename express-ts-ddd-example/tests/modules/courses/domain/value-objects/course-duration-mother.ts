@@ -2,11 +2,7 @@ import { CourseDuration } from '../../../../../src/modules/courses/domain/value-
 import { StringMother } from '../../../shared/domain/value-objects/mother-creator/string-mother'
 
 export const CourseDurationMother = {
-  create (value: string): CourseDuration {
-    return new CourseDuration(value)
-  },
-
-  random (): CourseDuration {
-    return this.create(StringMother.word({ max: 30 }))
+  create (value?: string): CourseDuration {
+    return new CourseDuration(value ?? StringMother.word({ max: 30 }))
   }
 }

@@ -1,11 +1,19 @@
-export abstract class StringValueObject {
-  readonly value: string
+import { InvalidStringValueError } from '../../errors/invalid-string-value-error'
+import { ValueObject } from './value-object'
 
-  constructor (value: string) {
-    this.value = value
+export abstract class StringValueObject extends ValueObject<string> {
+  constructor (readonly value: string) {
+    super(value)
+    this.validateString(value)
   }
 
-  toString (): string {
-    return this.value
+  private validateString (value: string): void {
+    if (!StringValueObject.isValid(value)) {
+      throw new InvalidStringValueError()
+    }
+  }
+
+  static isValid (value: string): boolean {
+    return typeof value === 'string'
   }
 }

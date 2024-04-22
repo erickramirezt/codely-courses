@@ -3,11 +3,17 @@ import { StringValueObject } from '../../../shared/domain/value-objects/value-ob
 export class CourseName extends StringValueObject {
   constructor (readonly value: string) {
     super(value)
-    this.ensureLengthIsLessThan30Characters(value)
+    this.validateCourseName(value)
   }
 
-  private ensureLengthIsLessThan30Characters (value: string): void {
-    if (value.length > 30) {
+  static maxLength = 30
+
+  static isValid (value: string): boolean {
+    return value.length <= CourseName.maxLength
+  }
+
+  private validateCourseName (value: string): void {
+    if (!CourseName.isValid(value)) {
       throw new Error(`<${value}> has more than 30 characters`)
     }
   }
