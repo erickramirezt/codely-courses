@@ -1,12 +1,13 @@
 import { Uuid } from '../../../../../src/modules/shared/domain/value-objects/uuid'
+import { MotherCreator } from './mother-creator/mother-creator'
 import { StringMother } from './mother-creator/string-mother'
 
 export const UuidMother = {
-  create (value?: string) {
-    return new Uuid(value ?? StringMother.uuid())
-  },
+	create(value?: string): Uuid {
+		return new Uuid(value ?? MotherCreator.string.uuid())
+	},
 
-  createInvalid () {
-    return StringMother.word({ max: 10 })
-  }
+	createInvalid(): string {
+		return StringMother.word({ max: 10 })
+	}
 }

@@ -1,19 +1,19 @@
-import { InvalidStringValueError } from '../../errors/invalid-string-value-error'
+import { BadRequestError } from '../../errors/bad-request-error'
 import { ValueObject } from './value-object'
 
-export abstract class StringValueObject extends ValueObject<string> {
-  constructor (readonly value: string) {
-    super(value)
-    this.validateString(value)
-  }
+export class StringValueObject extends ValueObject<string> {
+	constructor(readonly value: string) {
+		super(value)
+		if (StringValueObject.isStringValueValid(value)) {
+			throw new BadRequestError(StringValueObject.invalidStringValueMessage())
+		}
+	}
 
-  private validateString (value: string): void {
-    if (!StringValueObject.isValid(value)) {
-      throw new InvalidStringValueError()
-    }
-  }
+	static invalidStringValueMessage(): string {
+		return 'El valor ingresado no es una cadena de texto.'
+	}
 
-  static isValid (value: string): boolean {
-    return typeof value === 'string'
-  }
+	private static isStringValueValid(value: string): boolean {
+		return typeof value === 'string'
+	}
 }

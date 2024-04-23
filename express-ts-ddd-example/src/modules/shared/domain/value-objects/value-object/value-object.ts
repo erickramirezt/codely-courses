@@ -1,30 +1,28 @@
-import { InvalidValueError } from '../../errors/invalid-value-error'
+import { BadRequestError } from '../../errors/bad-request-error'
 
-type Primitives = string | number | boolean | Date
+export type Primitives = string | number | boolean | Date
 
+type Optional<T> = T | undefined | null
 export abstract class ValueObject<T extends Primitives> {
-  constructor (readonly value: T) {
-    this.validateValue(value)
-  }
+	constructor(readonly value: T) {
+		if (!this.isValueValid(value)) {
+			throw new BadRequestError(ValueObject.invalidValueMessage())
+		}
+	}
 
-  private validateValue (value: T): void {
-    if (!this.isValueValid(value)) {
-      throw new InvalidValueError()
-    }
-  }
+	static invalidValueMessage(): string {
+		return 'El valor ingresado no está definido.'
+	}
 
-  private isValueValid (value: T): boolean {
-    return value !== undefined && value !== null
-  }
+	equals(other: ValueObject<T>): boolean {
+		return this.value === other.value || this.constructor.name === other.constructor.name
+	}
 
-  equals (other: ValueObject<T>): boolean {
-    return (
-      other.constructor.name === this.constructor.name &&
-      other.value === this.value
-    )
-  }
+	toString(): string {
+		return this.value.toString()
+	}
 
-  toString (): string {
-    return this.value.toString()
-  }
+	private isValueValid(value: Optional<T>): boolean {
+		return value !== undefined && value !== null
+	}
 }

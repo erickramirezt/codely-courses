@@ -1,22 +1,22 @@
-import { InvalidUuidError } from '../errors/invalid-uuid-error'
+import { InternalServerError } from '../errors/internal-server-error'
 import { StringValueObject } from './value-object/string-value-object'
 
 export class Uuid extends StringValueObject {
-  constructor (readonly value: string) {
-    super(value)
-    this.validateUuid(value)
-  }
+	private static readonly validUuidRegexExp =
+		/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi
 
-  private validateUuid (value: string): void {
-    if (!Uuid.isValid(value)) {
-      throw new InvalidUuidError()
-    }
-  }
+	constructor(readonly value: string) {
+		super(value)
+		if (!Uuid.isUuuidValid(value)) {
+			throw new InternalServerError(Uuid.invalidUuidMessage())
+		}
+	}
 
-  static isValid (value: string): boolean {
-    const regexExp =
-      /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi
+	private static isUuuidValid(value: string): boolean {
+		return Uuid.validUuidRegexExp.test(value)
+	}
 
-    return regexExp.test(value)
-  }
+	private static invalidUuidMessage(): string {
+		return 'El UUID ingresado no es válido.'
+	}
 }
