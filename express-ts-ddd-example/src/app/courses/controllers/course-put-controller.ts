@@ -9,12 +9,14 @@ interface CoursePutRequestBody {
 	duration: string
 }
 
-export const coursePutController: Controller = async (req, res) => {
+export const coursePutController: Controller = (req, res) => {
 	const { duration, id, name } = req.body as CoursePutRequestBody
-	try {
-		courseCreator.run({ duration, id, name })
-		res.status(StatusCodes.OK).send()
-	} catch {
-		res.status(StatusCodes.INTERNAL_SERVER_ERROR).send()
-	}
+	courseCreator
+		.run({ duration, id, name })
+		.then(() => {
+			res.status(StatusCodes.OK).send()
+		})
+		.catch(() => {
+			res.status(StatusCodes.INTERNAL_SERVER_ERROR).send()
+		})
 }
