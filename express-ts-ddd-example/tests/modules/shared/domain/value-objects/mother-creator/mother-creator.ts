@@ -7,6 +7,9 @@ export const MotherCreator = {
 		},
 		word({ max, min = 1 }: { min?: number; max: number }): string {
 			return faker.word.sample({ length: { max, min } })
+		},
+		words({ number }: { number: number }): string {
+			return faker.word.words(number)
 		}
 	}
 }

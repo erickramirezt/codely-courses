@@ -1,0 +1,3 @@
+import { InvalidStringValueError } from '../../../shared/domain/errors/invalid-string-value-error'
+
+export class InvalidCourseDurationError extends InvalidStringValueError {}

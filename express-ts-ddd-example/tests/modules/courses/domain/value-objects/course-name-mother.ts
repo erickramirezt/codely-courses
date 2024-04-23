@@ -6,7 +6,7 @@ export const CourseNameMother = {
 		return new CourseName(value ?? StringMother.word({ max: CourseName.maxLength }))
 	},
 
-	invalidName(): string {
-		return 'a'.repeat(40)
+	createTooLong(): string {
+		return StringMother.words({ number: 7 })
 	}
 }

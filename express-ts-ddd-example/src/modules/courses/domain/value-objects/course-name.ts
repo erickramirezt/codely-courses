@@ -1,4 +1,5 @@
 import { StringValueObject } from '../../../shared/domain/value-objects/value-object/string-value-object'
+import { InvalidCourseNameError } from '../errors/invalid-course-name-error'
 
 export class CourseName extends StringValueObject {
 	static maxLength = 30
@@ -14,7 +15,7 @@ export class CourseName extends StringValueObject {
 
 	private validateCourseName(value: string): void {
 		if (!CourseName.isValid(value)) {
-			throw new Error(`<${value}> has more than 30 characters`)
+			throw new InvalidCourseNameError()
 		}
 	}
 }

@@ -1,4 +1,6 @@
 import { CourseCreator } from '../../../../../src/modules/courses/application/create/course-creator'
+import { InvalidCourseIdError } from '../../../../../src/modules/courses/domain/errors/invalid-course-id-error'
+import { InvalidCourseNameError } from '../../../../../src/modules/courses/domain/errors/invalid-course-name-error'
 import { CourseMother } from '../../domain/model/course-mother'
 import { CourseRepositoryMock } from '../../infrastructure/persistence/course-repository-mock'
 import { CreateCourseRequestMother } from './create-course-request-mother'
@@ -13,9 +15,9 @@ beforeEach(() => {
 
 describe('CourseCreator', () => {
 	it('should create a valid course', async () => {
-		const request = CreateCourseRequestMother.random()
+		const request = CreateCourseRequestMother.create()
 
-		const course = CourseMother.fromRequest(request)
+		const course = CourseMother.fromCreateCourseRequest(request)
 
 		await creator.run(request)
 
@@ -23,14 +25,27 @@ describe('CourseCreator', () => {
 		repository.assertLastSavedCourseIs(course)
 	})
 
-	it('should throw an error if course name length is exceeded', () => {
+	it('should throw an error if course id is invalid', () => {
 		expect(() => {
-			const request = CreateCourseRequestMother.invalidRequest()
-			const course = CourseMother.fromRequest(request)
+			const request = CreateCourseRequestMother.createWithInvalidId()
+			const course = CourseMother.fromCreateCourseRequest(request)
 
 			void creator.run(request)
 
 			repository.assertLastSavedCourseIs(course)
-		}).toThrow(Error)
+		}).toThrow(InvalidCourseIdError.message)
 	})
+
+	it('should throw an error if course name length is exceeded', () => {
+		expect(() => {
+			const request = CreateCourseRequestMother.createWithTooLongName()
+			const course = CourseMother.fromCreateCourseRequest(request)
+
+			void creator.run(request)
+
+			repository.assertLastSavedCourseIs(course)
+		}).toThrow(InvalidCourseNameError.message)
+	})
+
+	// TODO: COURSE DURATION VALIDATION
 })
