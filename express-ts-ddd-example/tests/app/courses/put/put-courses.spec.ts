@@ -1,4 +1,4 @@
-import test, { APIRequestContext } from '@playwright/test'
+import test, { APIRequestContext, expect } from '@playwright/test'
 import { StatusCodes } from 'http-status-codes'
 
 import { coursesApiRoute } from '../../../../src/app/courses/routers/courses-router'
@@ -19,8 +19,8 @@ test('put course', async () => {
 			...body
 		}
 	})
-	expect(res.status()).toBe(StatusCodes.OK)
 	expect(res.body()).toEqual({})
+	expect(res.status()).toBe(StatusCodes.OK)
 })
 
 test('put course with invalid id', async () => {
