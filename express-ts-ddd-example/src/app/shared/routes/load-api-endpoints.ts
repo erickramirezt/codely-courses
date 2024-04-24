@@ -1,9 +1,11 @@
 import { type Application } from 'express'
 
+import { coursesApiRoute, coursesRouter } from '../../courses/routers/courses-router'
 import { statusRouter } from '../../status/routers/status-router'
 
-export const BASE_API_ROUTE = '/api-backend'
+export const baseApiRoute = '/api-backend'
 
 export const loadApiEndpoints = (app: Application): void => {
-	app.use(BASE_API_ROUTE, statusRouter)
+	app.use(baseApiRoute, statusRouter)
+	app.use(coursesApiRoute, coursesRouter)
 }

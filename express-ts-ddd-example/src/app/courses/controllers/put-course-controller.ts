@@ -9,7 +9,7 @@ interface CoursePutRequestBody {
 	duration: string
 }
 
-export const coursePutController: Controller = (req, res) => {
+export const putCourseController: Controller = (req, res) => {
 	const { duration, id, name } = req.body as CoursePutRequestBody
 	courseCreator
 		.run({ duration, id, name })
