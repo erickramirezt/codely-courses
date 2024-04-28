@@ -1,4 +1,5 @@
 import { AggregateRoot } from '../../../../shared/domain/model/aggregate-root'
+import { UserEmailUpdatedDomainEvent } from '../events/user-email-updated-domain-event'
 import { UserRegisteredDomainEvent } from '../events/user-registered-domain-event'
 import { UserEmail } from '../value-objects/user-email'
 import { UserId } from '../value-objects/user-id'
@@ -16,7 +17,7 @@ export class User extends AggregateRoot<UserPrimitives> {
   private constructor (
     readonly id: UserId,
     private readonly name: UserName,
-    private readonly email: UserEmail,
+    private email: UserEmail,
     private readonly profilePicture: UserProfilePicture
   ) {
     super()
@@ -53,5 +54,13 @@ export class User extends AggregateRoot<UserPrimitives> {
       email: this.email.value,
       profilePicture: this.profilePicture.value
     }
+  }
+
+  updateEmail (email: string): void {
+    this.email = new UserEmail(email)
+
+    this.record(
+      new UserEmailUpdatedDomainEvent(this.id.value, this.email.value)
+    )
   }
 }
