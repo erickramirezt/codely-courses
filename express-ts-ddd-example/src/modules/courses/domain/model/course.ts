@@ -11,9 +11,9 @@ export interface CoursePrimitives {
 
 export class Course extends AggregateRoot<CoursePrimitives> {
 	constructor(
-		readonly id: CourseId,
-		readonly name: CourseName,
-		readonly duration: CourseDuration
+		public id: CourseId,
+		public name: CourseName,
+		public duration: CourseDuration
 	) {
 		super()
 	}
