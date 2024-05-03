@@ -1,5 +1,6 @@
 import { UserRegisteredDomainEvent } from '../../../../../../src/modules/shop/users/domain/events/user-registered-domain-event'
 import { type UserPrimitives } from '../../../../../../src/modules/shop/users/domain/model/user'
+import { UserStatus } from '../../../../../../src/modules/shop/users/domain/value-objects/user-status'
 import { UserEmailMother } from '../value-objects/user-email-mother'
 import { UserIdMother } from '../value-objects/user-id-mother'
 import { UserNameMother } from '../value-objects/user-name-mother'
@@ -12,6 +13,7 @@ export const UserRegisteredDomainEventMother = {
       email: UserEmailMother.create().value,
       name: UserNameMother.create().value,
       profilePicture: UserProfilePictureMother.create().value,
+      status: UserStatus.Active,
       ...params
     }
 
@@ -19,7 +21,8 @@ export const UserRegisteredDomainEventMother = {
       primitives.id,
       primitives.name,
       primitives.email,
-      primitives.profilePicture
+      primitives.profilePicture,
+      primitives.status
     )
   }
 }

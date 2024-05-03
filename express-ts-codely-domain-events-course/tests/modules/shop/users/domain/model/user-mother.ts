@@ -1,4 +1,5 @@
 import { User, type UserPrimitives } from '../../../../../../src/modules/shop/users/domain/model/user'
+import { UserStatus } from '../../../../../../src/modules/shop/users/domain/value-objects/user-status'
 import { UserEmailMother } from '../value-objects/user-email-mother'
 import { UserIdMother } from '../value-objects/user-id-mother'
 import { UserNameMother } from '../value-objects/user-name-mother'
@@ -11,6 +12,7 @@ export const UserMother = {
       email: UserEmailMother.create().value,
       name: UserNameMother.create().value,
       profilePicture: UserProfilePictureMother.create().value,
+      status: UserStatus.Active,
       ...params
     }
 
