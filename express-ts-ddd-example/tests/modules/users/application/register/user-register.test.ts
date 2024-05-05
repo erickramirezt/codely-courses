@@ -3,15 +3,8 @@ import { InvalidUuidError } from '../../../../../src/modules/shared/domain/error
 import { UserRegister } from '../../../../../src/modules/users/application/register/user-register'
 import { User } from '../../../../../src/modules/users/domain/model/user'
 import { InMemoryUserRepository } from '../../../../../src/modules/users/infrastructure/in-memory-user-repository'
+import { UserMother } from '../../domain/model/user-mother'
 
-const validEmail = 'validemail@gmail.com'
-const validId = crypto.randomUUID()
-const currentDate = new Date()
-const validBirthdate = new Date(
-	currentDate.getFullYear() - 50,
-	currentDate.getMonth(),
-	currentDate.getDate()
-)
 const validJobExperiences = [
 	{
 		title: 'Job title',
@@ -27,10 +20,11 @@ describe('UserRegister', () => {
 		const userRegister = new UserRegister(repository)
 		const repositorySave = jest.spyOn(repository, 'save')
 
-		await userRegister.run(validId, validEmail, validBirthdate, validJobExperiences)
+		const user = UserMother.create()
+		await userRegister.run(user.idValue, user.emailValue, user.birthdateValue, validJobExperiences)
 
 		expect(repositorySave).toHaveBeenCalledWith(
-			new User(validId, validEmail, validBirthdate, validJobExperiences)
+			new User(user.idValue, user.emailValue, user.birthdateValue, validJobExperiences)
 		)
 	})
 
@@ -39,10 +33,11 @@ describe('UserRegister', () => {
 		const userRegister = new UserRegister(repository)
 		const repositorySave = jest.spyOn(repository, 'save')
 
+		const user = UserMother.create()
 		const invalidId = 'invalid-uuid'
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(invalidId, validEmail, validBirthdate, validJobExperiences)
+			await userRegister.run(invalidId, user.emailValue, user.birthdateValue, validJobExperiences)
 		}
 
 		await expect(register).rejects.toThrow(InvalidUuidError)
@@ -54,10 +49,11 @@ describe('UserRegister', () => {
 		const userRegister = new UserRegister(repository)
 		const repositorySave = jest.spyOn(repository, 'save')
 
+		const user = UserMother.create()
 		const invalidEmail = 'invalid-email'
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(validId, invalidEmail, validBirthdate, validJobExperiences)
+			await userRegister.run(user.idValue, invalidEmail, user.birthdateValue, validJobExperiences)
 		}
 
 		await expect(register).rejects.toThrow(BadRequestError)
@@ -69,10 +65,11 @@ describe('UserRegister', () => {
 		const userRegister = new UserRegister(repository)
 		const repositorySave = jest.spyOn(repository, 'save')
 
+		const user = UserMother.create()
 		const invalidEmail = 'invalid-email@invalid-domain.com'
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(validId, invalidEmail, validBirthdate, validJobExperiences)
+			await userRegister.run(user.idValue, invalidEmail, user.birthdateValue, validJobExperiences)
 		}
 
 		await expect(register).rejects.toThrow(BadRequestError)
@@ -84,14 +81,12 @@ describe('UserRegister', () => {
 		const userRegister = new UserRegister(repository)
 		const repositorySave = jest.spyOn(repository, 'save')
 
-		const invalidBirthdate = new Date(
-			currentDate.getFullYear() - 111,
-			currentDate.getMonth(),
-			currentDate.getDate()
-		)
+		const user = UserMother.create()
+		const invalidBirthdate = new Date()
+		invalidBirthdate.setFullYear(invalidBirthdate.getFullYear() - 111)
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(validId, validEmail, invalidBirthdate, validJobExperiences)
+			await userRegister.run(user.idValue, user.emailValue, invalidBirthdate, validJobExperiences)
 		}
 
 		await expect(register).rejects.toThrow(BadRequestError)
@@ -103,19 +98,20 @@ describe('UserRegister', () => {
 		const userRegister = new UserRegister(repository)
 		const repositorySave = jest.spyOn(repository, 'save')
 
-		const invalidBirthdate = new Date(
-			currentDate.getFullYear() - 17,
-			currentDate.getMonth(),
-			currentDate.getDate()
-		)
+		const user = UserMother.create()
+		const invalidBirthdate = new Date()
+		invalidBirthdate.setFullYear(invalidBirthdate.getFullYear() - 18)
+		invalidBirthdate.setMonth(11)
+		invalidBirthdate.setDate(31)
 
+		const currentDate = new Date()
 		// If the test runs on January 1st, adjust the birthdate to make the user still 17 years old
 		if (currentDate.getMonth() === 0 && currentDate.getDate() === 1) {
 			invalidBirthdate.setFullYear(invalidBirthdate.getFullYear() - 1)
 		}
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(validId, validEmail, invalidBirthdate, validJobExperiences)
+			await userRegister.run(user.idValue, user.emailValue, invalidBirthdate, validJobExperiences)
 		}
 
 		await expect(register).rejects.toThrow(BadRequestError)
@@ -127,8 +123,10 @@ describe('UserRegister', () => {
 		const userRegister = new UserRegister(repository)
 		const repositorySave = jest.spyOn(repository, 'save')
 
+		const currentDate = new Date()
 		const invalidStartDate = new Date(currentDate.getFullYear() + 1, 0, 1)
 
+		const user = UserMother.create()
 		const invalidJobExperiences = [
 			{
 				...validJobExperiences[0],
@@ -137,7 +135,12 @@ describe('UserRegister', () => {
 		]
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(validId, validEmail, validBirthdate, invalidJobExperiences)
+			await userRegister.run(
+				user.idValue,
+				user.emailValue,
+				user.birthdateValue,
+				invalidJobExperiences
+			)
 		}
 
 		await expect(register).rejects.toThrow(BadRequestError)
@@ -149,6 +152,7 @@ describe('UserRegister', () => {
 		const userRegister = new UserRegister(repository)
 		const repositorySave = jest.spyOn(repository, 'save')
 
+		const currentDate = new Date()
 		const startDate = new Date(currentDate.getFullYear() - 1, 0, 1)
 		const endDate = new Date(currentDate.getFullYear() - 2, 0, 1)
 
@@ -160,8 +164,15 @@ describe('UserRegister', () => {
 			}
 		]
 
+		const user = UserMother.create()
+
 		const register = async (): Promise<void> => {
-			await userRegister.run(validId, validEmail, validBirthdate, invalidJobExperiences)
+			await userRegister.run(
+				user.idValue,
+				user.emailValue,
+				user.birthdateValue,
+				invalidJobExperiences
+			)
 		}
 
 		await expect(register).rejects.toThrow(BadRequestError)

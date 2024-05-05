@@ -49,6 +49,14 @@ export class User {
 		return this.email.value
 	}
 
+	get idValue(): string {
+		return this.id.value
+	}
+
+	get birthdateValue(): Date {
+		return this.birthdate.value
+	}
+
 	updateEmail(email: string): void {
 		this.email = new UserEmail(email)
 	}
