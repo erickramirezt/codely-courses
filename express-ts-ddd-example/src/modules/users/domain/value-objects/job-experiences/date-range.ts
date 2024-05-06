@@ -1,28 +1,46 @@
-import { BadRequestError } from '../../../../shared/domain/errors/bad-request-error'
+import { InvalidDateRangeError } from '../../errors/job-experiences/invalid-date-range-error'
 import { EndDate } from './end-date'
 import { StartDate } from './start-date'
 
+export interface DateRangePrimitives {
+	startDate: Date
+	endDate: Date | null
+}
+
 export class DateRange {
-	startDate: StartDate
-	endDate: EndDate | null
-
-	constructor(startDate: Date, endDate: Date | null) {
-		this.startDate = new StartDate(startDate)
-		this.endDate = endDate !== null ? new EndDate(endDate) : null
-
-		this.validateDateRange(this.startDate, this.endDate)
+	constructor(
+		readonly startDate: StartDate,
+		readonly endDate: EndDate | null
+	) {
+		this.validateDateRange({ startDate: startDate.value, endDate: endDate?.value ?? null })
 	}
 
-	// TODO: ADD STATIC METHOD TO CREATE DATE RANGE FROM PRIMITIVES
+	static fromPrimitives(primitives: DateRangePrimitives): DateRange {
+		return new DateRange(
+			new StartDate(primitives.startDate),
+			primitives.endDate ? new EndDate(primitives.endDate) : null
+		)
+	}
 
-	// TODO: ADD METHOD TO RETURN PRIMITIVES
+	static isValid(primitives: DateRangePrimitives): boolean {
+		return primitives.endDate === null || primitives.startDate <= primitives.endDate
+	}
 
-	// TODO: ADD STATIC METHOD IS VALID
+	toPrimitives(): DateRangePrimitives {
+		return {
+			startDate: this.startDate.value,
+			endDate: this.endDate?.value ?? null
+		}
+	}
 
-	private validateDateRange(startDate: StartDate, endDate: EndDate | null) {
-		// TODO: USE IS VALID STATIC METHOD AND CREATE INVALID DATE RANGE ERROR
-		if (endDate !== null && startDate.value > endDate.value) {
-			throw new BadRequestError('La fecha de inicio no puede ser mayor a la fecha de fin')
+	private validateDateRange(primitives: DateRangePrimitives) {
+		if (
+			!DateRange.isValid({
+				startDate: primitives.startDate,
+				endDate: primitives.endDate ?? null
+			})
+		) {
+			throw new InvalidDateRangeError()
 		}
 	}
 }

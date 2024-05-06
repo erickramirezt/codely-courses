@@ -11,7 +11,10 @@ export class JobExperience {
 	constructor(company: string, title: string, startDate: Date, endDate: Date | null) {
 		this.company = new Company(company)
 		this.title = new Title(title)
-		this.dateRange = new DateRange(startDate, endDate)
+		this.dateRange = DateRange.fromPrimitives({
+			startDate,
+			endDate
+		})
 	}
 
 	// TODO: ADD STATIC METHOD TO CREATE JOB EXPERIENCE FROM PRIMITIVES

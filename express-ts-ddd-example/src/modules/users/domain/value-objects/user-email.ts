@@ -1,5 +1,5 @@
-import { BadRequestError } from '../../../shared/domain/errors/bad-request-error'
 import { StringValueObject } from '../../../shared/domain/value-objects/value-object/string-value-object'
+import { InvalidUserEmailError } from '../errors/invalid-user-email-error'
 
 export class UserEmail extends StringValueObject {
 	constructor(readonly value: string) {
@@ -7,16 +7,16 @@ export class UserEmail extends StringValueObject {
 		this.validateUserEmail(value)
 	}
 
-	// TODO: CREATE IS VALID STATIC METHOD
-
-	private validateUserEmail(value: string) {
+	static isValid(value: string): boolean {
 		const regexExp =
 			/^(?=.*[@](?:gmail\.com|hotmail\.com)$)[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[a-zA-Z0-9_-]*$/
 
-		// TODO: USE IS VALID STATIC METHOD
-		if (!regexExp.test(value)) {
-			// TODO: CREATE INVALID EMAIL ERROR
-			throw new BadRequestError('El correo electrónico ingresado no es válido.')
+		return regexExp.test(value)
+	}
+
+	private validateUserEmail(value: string) {
+		if (!UserEmail.isValid(value)) {
+			throw new InvalidUserEmailError()
 		}
 	}
 }
