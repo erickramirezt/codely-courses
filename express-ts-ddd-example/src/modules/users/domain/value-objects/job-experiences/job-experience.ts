@@ -2,30 +2,60 @@ import { Company } from './company'
 import { DateRange } from './date-range'
 import { Title } from './title'
 
-export class JobExperience {
-	// TODO: UPDATE PROPERTIES TO BE PUBLIC AND REFACTOR CONSTURCTOR TO USE VALUE OBJECTS
-	company: Company
-	title: Title
-	dateRange: DateRange
+export interface JobExperiencePrimitives {
+	company: string
+	title: string
+	startDate: Date
+	endDate: Date | null
+}
 
-	constructor(company: string, title: string, startDate: Date, endDate: Date | null) {
-		this.company = new Company(company)
-		this.title = new Title(title)
+export class JobExperience {
+	constructor(
+		private readonly company: Company,
+		private readonly title: Title,
+		private readonly dateRange: DateRange
+	) {
+		this.company = company
+		this.title = title
 		this.dateRange = DateRange.fromPrimitives({
-			startDate,
-			endDate
+			startDate: dateRange.startDateValue,
+			endDate: dateRange.endDateValue
 		})
 	}
 
-	// TODO: ADD STATIC METHOD TO CREATE JOB EXPERIENCE FROM PRIMITIVES
-
-	// TODO: ADD METHOD TO RETURN PRIMITIVES
-
-	get startDate(): Date {
-		return this.dateRange.startDate.value
+	static fromPrimitives(primitives: JobExperiencePrimitives): JobExperience {
+		return new JobExperience(
+			new Company(primitives.company),
+			new Title(primitives.title),
+			DateRange.fromPrimitives({
+				startDate: primitives.startDate,
+				endDate: primitives.endDate
+			})
+		)
 	}
 
-	get endDate(): Date | null {
-		return this.dateRange.endDate?.value ?? null
+	toPrimitives(): JobExperiencePrimitives {
+		return {
+			company: this.company.value,
+			title: this.title.value,
+			startDate: this.startDateValue,
+			endDate: this.endDateValue
+		}
+	}
+
+	get companyValue(): string {
+		return this.company.value
+	}
+
+	get titleValue(): string {
+		return this.title.value
+	}
+
+	get startDateValue(): Date {
+		return this.dateRange.startDateValue
+	}
+
+	get endDateValue(): Date | null {
+		return this.dateRange.endDateValue
 	}
 }

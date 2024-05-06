@@ -1,44 +1,36 @@
-import { JobExperience } from './job-experience'
+import { InvalidJobExperiencesError } from '../../errors/job-experiences/invalid-job-experiences-error'
+import { JobExperience, JobExperiencePrimitives } from './job-experience'
 
 // TODO: EXTEND THIS CLASS FROM COLLECTION<JOB EXPERIENCE, JOB EXPERIENCE PRIMITIVES>
 export class JobExperiences {
 	public readonly value: JobExperience[]
-	constructor(
-		experiences: Array<{
-			company: string
-			title: string
-			startDate: Date
-			endDate: Date | null
-		}>
-	) {
-		this.value = experiences.map(
-			(_) => new JobExperience(_.company, _.title, _.startDate, _.endDate)
-		)
+	constructor(experiences: Array<JobExperiencePrimitives>) {
+		this.value = experiences.map((_) => JobExperience.fromPrimitives(_))
 		this.validateJobExperiences(this.value)
 	}
 
-	// TODO: ADD STATIC METHOD TO CREATE JOB EXPERIENCES FROM PRIMITIVES
+	fromPrimitives(primitives: JobExperiencePrimitives[]): JobExperiences {
+		return new JobExperiences(primitives)
+	}
 
-	// TODO: ADD METHOD TO RETURN PRIMITIVES
-
-	// TODO: ADD IS VALID STATIC METHOD
+	toPrimitives(): JobExperiencePrimitives[] {
+		return this.value.map((_) => _.toPrimitives())
+	}
 
 	private validateJobExperiences(jobExperiences: JobExperience[]) {
 		const sortedExperiences = jobExperiences.sort(
-			(a, b) => a.startDate.getTime() - b.startDate.getTime()
+			(a, b) => a.startDateValue.getTime() - b.startDateValue.getTime()
 		)
 		for (let i = 0; i < sortedExperiences.length - 1; i++) {
 			const currentExperience = sortedExperiences[i]
 			const nextExperience = sortedExperiences[i + 1]
 
-			if (currentExperience.endDate === null) {
+			if (currentExperience.endDateValue === null) {
 				continue
 			}
 
-			// TODO: USE DATE RANGE IS VALID STATIC METHOD
-			if (currentExperience.endDate.getTime() > nextExperience.startDate.getTime()) {
-				// TODO: CREATE INVALID JOB EXPERIENCES ERROR
-				throw new Error('Las experiencias laborales no pueden superponerse')
+			if (currentExperience.endDateValue.getTime() > nextExperience.startDateValue.getTime()) {
+				throw new InvalidJobExperiencesError()
 			}
 		}
 	}

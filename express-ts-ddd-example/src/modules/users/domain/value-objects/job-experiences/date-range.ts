@@ -9,8 +9,8 @@ export interface DateRangePrimitives {
 
 export class DateRange {
 	constructor(
-		readonly startDate: StartDate,
-		readonly endDate: EndDate | null
+		private readonly startDate: StartDate,
+		private readonly endDate: EndDate | null
 	) {
 		this.validateDateRange({ startDate: startDate.value, endDate: endDate?.value ?? null })
 	}
@@ -31,6 +31,14 @@ export class DateRange {
 			startDate: this.startDate.value,
 			endDate: this.endDate?.value ?? null
 		}
+	}
+
+	get startDateValue(): Date {
+		return this.startDate.value
+	}
+
+	get endDateValue(): Date | null {
+		return this.endDate?.value ?? null
 	}
 
 	private validateDateRange(primitives: DateRangePrimitives) {
