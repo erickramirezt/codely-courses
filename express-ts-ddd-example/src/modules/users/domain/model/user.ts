@@ -1,49 +1,54 @@
-// export interface UserPrimitives {
-// 	id: string
-// 	email: string
-// 	birthdate: Date
-// 	jobExperiences: Array<{
-// 		company: string
-// 		title: string
-// 		startDate: Date
-// 		endDate: Date | null
-// 	}>
-// }
-
-import { JobExperiences } from '../value-objects/job-experiences/job-experiences'
+import { AggregateRoot } from '../../../shared/domain/model/aggregate-root'
+import {
+	JobExperience,
+	JobExperiencePrimitives
+} from '../value-objects/job-experiences/job-experience'
+import { JobExperienceCollection } from '../value-objects/job-experiences/job-experience-collection'
 import { UserBirthdate } from '../value-objects/user-birthdate'
 import { UserEmail } from '../value-objects/user-email'
 import { UserId } from '../value-objects/user-id'
 
-// TODO: EXTEND THIS CLASS FROM AGGREGATE ROOT<USER PRIMITIVES>
-export class User {
-	// TODO: UPDATE PROPERTIES TO BE PUBLIC AND REFACTOR CONSTRUCTOR TO USE VALUE OBJECTS
+export interface UserPrimitives {
+	id: string
+	email: string
+	birthdate: Date
+	jobExperiences: Array<{
+		company: string
+		title: string
+		startDate: Date
+		endDate: Date | null
+	}>
+}
 
-	private email: UserEmail
-	private readonly id: UserId
-	private readonly birthdate: UserBirthdate
-	private readonly jobExperiences: JobExperiences
-
+export class User extends AggregateRoot<UserPrimitives> {
 	constructor(
-		id: string,
-		email: string,
-		birthdate: Date,
-		jobExperiences: Array<{
-			company: string
-			title: string
-			startDate: Date
-			endDate: Date | null
-		}>
+		private readonly id: UserId,
+		private email: UserEmail,
+		private readonly birthdate: UserBirthdate,
+		private readonly jobExperiences: JobExperienceCollection
 	) {
-		this.id = new UserId(id)
-		this.email = new UserEmail(email)
-		this.birthdate = new UserBirthdate(birthdate)
-		this.jobExperiences = new JobExperiences(jobExperiences)
+		super()
 	}
 
-	// TODO: ADD STATIC METHOD TO CREATE USER FROM PRIMITIVES
+	static fromPrimitives(primitives: UserPrimitives): User {
+		return new User(
+			new UserId(primitives.id),
+			new UserEmail(primitives.email),
+			new UserBirthdate(primitives.birthdate),
+			new JobExperienceCollection(
+				primitives.jobExperiences.map((_) => JobExperience.fromPrimitives(_))
+			)
+		)
+	}
 
-	// TODO: ADD METHOD TO RETURN PRIMITIVES
+	toPrimitives(): UserPrimitives {
+		return {
+			id: this.id.value,
+			email: this.email.value,
+			birthdate: this.birthdate.value,
+			jobExperiences: this.jobExperiences.toPrimitives()
+		}
+	}
 
 	get emailValue(): string {
 		return this.email.value
@@ -55,6 +60,10 @@ export class User {
 
 	get birthdateValue(): Date {
 		return this.birthdate.value
+	}
+
+	get jobExperiencesValue(): JobExperiencePrimitives[] {
+		return this.jobExperiences.jobExperiencesValue
 	}
 
 	updateEmail(email: string): void {

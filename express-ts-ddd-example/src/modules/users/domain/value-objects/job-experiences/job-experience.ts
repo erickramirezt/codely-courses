@@ -14,14 +14,7 @@ export class JobExperience {
 		private readonly company: Company,
 		private readonly title: Title,
 		private readonly dateRange: DateRange
-	) {
-		this.company = company
-		this.title = title
-		this.dateRange = DateRange.fromPrimitives({
-			startDate: dateRange.startDateValue,
-			endDate: dateRange.endDateValue
-		})
-	}
+	) {}
 
 	static fromPrimitives(primitives: JobExperiencePrimitives): JobExperience {
 		return new JobExperience(

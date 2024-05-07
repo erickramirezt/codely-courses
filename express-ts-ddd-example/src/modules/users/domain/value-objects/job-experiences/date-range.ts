@@ -12,7 +12,10 @@ export class DateRange {
 		private readonly startDate: StartDate,
 		private readonly endDate: EndDate | null
 	) {
-		this.validateDateRange({ startDate: startDate.value, endDate: endDate?.value ?? null })
+		this.validateDateRange({
+			startDate: startDate.value,
+			endDate: endDate?.value ?? null
+		})
 	}
 
 	static fromPrimitives(primitives: DateRangePrimitives): DateRange {

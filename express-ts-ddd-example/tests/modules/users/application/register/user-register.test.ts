@@ -21,10 +21,20 @@ describe('UserRegister', () => {
 		const repositorySave = jest.spyOn(repository, 'save')
 
 		const user = UserMother.create()
-		await userRegister.run(user.idValue, user.emailValue, user.birthdateValue, validJobExperiences)
+		await userRegister.run({
+			id: user.idValue,
+			email: user.emailValue,
+			birthdate: user.birthdateValue,
+			jobExperiences: validJobExperiences
+		})
 
 		expect(repositorySave).toHaveBeenCalledWith(
-			new User(user.idValue, user.emailValue, user.birthdateValue, validJobExperiences)
+			User.fromPrimitives({
+				id: user.idValue,
+				email: user.emailValue,
+				birthdate: user.birthdateValue,
+				jobExperiences: validJobExperiences
+			})
 		)
 	})
 
@@ -37,7 +47,12 @@ describe('UserRegister', () => {
 		const invalidId = 'invalid-uuid'
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(invalidId, user.emailValue, user.birthdateValue, validJobExperiences)
+			await userRegister.run({
+				id: invalidId,
+				email: user.emailValue,
+				birthdate: user.birthdateValue,
+				jobExperiences: validJobExperiences
+			})
 		}
 
 		await expect(register).rejects.toThrow(InvalidUuidError)
@@ -53,7 +68,12 @@ describe('UserRegister', () => {
 		const invalidEmail = 'invalid-email'
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(user.idValue, invalidEmail, user.birthdateValue, validJobExperiences)
+			await userRegister.run({
+				id: user.idValue,
+				email: invalidEmail,
+				birthdate: user.birthdateValue,
+				jobExperiences: validJobExperiences
+			})
 		}
 
 		await expect(register).rejects.toThrow(BadRequestError)
@@ -69,7 +89,12 @@ describe('UserRegister', () => {
 		const invalidEmail = 'invalid-email@invalid-domain.com'
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(user.idValue, invalidEmail, user.birthdateValue, validJobExperiences)
+			await userRegister.run({
+				id: user.idValue,
+				email: invalidEmail,
+				birthdate: user.birthdateValue,
+				jobExperiences: validJobExperiences
+			})
 		}
 
 		await expect(register).rejects.toThrow(BadRequestError)
@@ -86,7 +111,12 @@ describe('UserRegister', () => {
 		invalidBirthdate.setFullYear(invalidBirthdate.getFullYear() - 111)
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(user.idValue, user.emailValue, invalidBirthdate, validJobExperiences)
+			await userRegister.run({
+				id: user.idValue,
+				email: user.emailValue,
+				birthdate: invalidBirthdate,
+				jobExperiences: validJobExperiences
+			})
 		}
 
 		await expect(register).rejects.toThrow(BadRequestError)
@@ -111,7 +141,12 @@ describe('UserRegister', () => {
 		}
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(user.idValue, user.emailValue, invalidBirthdate, validJobExperiences)
+			await userRegister.run({
+				id: user.idValue,
+				email: user.emailValue,
+				birthdate: invalidBirthdate,
+				jobExperiences: validJobExperiences
+			})
 		}
 
 		await expect(register).rejects.toThrow(BadRequestError)
@@ -135,12 +170,12 @@ describe('UserRegister', () => {
 		]
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(
-				user.idValue,
-				user.emailValue,
-				user.birthdateValue,
-				invalidJobExperiences
-			)
+			await userRegister.run({
+				id: user.idValue,
+				email: user.emailValue,
+				birthdate: user.birthdateValue,
+				jobExperiences: invalidJobExperiences
+			})
 		}
 
 		await expect(register).rejects.toThrow(BadRequestError)
@@ -167,12 +202,12 @@ describe('UserRegister', () => {
 		const user = UserMother.create()
 
 		const register = async (): Promise<void> => {
-			await userRegister.run(
-				user.idValue,
-				user.emailValue,
-				user.birthdateValue,
-				invalidJobExperiences
-			)
+			await userRegister.run({
+				id: user.idValue,
+				email: user.emailValue,
+				birthdate: user.birthdateValue,
+				jobExperiences: invalidJobExperiences
+			})
 		}
 
 		await expect(register).rejects.toThrow(BadRequestError)
