@@ -1,4 +1,5 @@
 import { StringValueObject } from '../../../../shared/domain/value-objects/value-object/string-value-object'
+import { InvalidProductReviewCommentError } from '../errors/invalid-product-review-comment-error'
 
 export class ProductReviewComment extends StringValueObject {
 	private static readonly MIN_LENGTH = 1
@@ -14,8 +15,7 @@ export class ProductReviewComment extends StringValueObject {
 			value.length < ProductReviewComment.MIN_LENGTH ||
 			value.length > ProductReviewComment.MAX_LENGTH
 		) {
-			// TODO: CREATE CUSTOM INVALID ERROR
-			throw new Error(value)
+			throw new InvalidProductReviewCommentError(value)
 		}
 	}
 }

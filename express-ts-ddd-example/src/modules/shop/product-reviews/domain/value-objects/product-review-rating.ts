@@ -1,3 +1,5 @@
+import { InvalidProductReviewRatingError } from '../errors/invalid-product-review-rating-error'
+
 export class ProductReviewRating {
 	constructor(readonly value: number) {
 		this.validateProductReviewRating(value)
@@ -5,8 +7,7 @@ export class ProductReviewRating {
 
 	private validateProductReviewRating(value: number): void {
 		if (value < 0 || value > 5) {
-			// TODO: CREATE CUSTOM INVALID ERROR
-			throw new Error(value.toString())
+			throw new InvalidProductReviewRatingError(value)
 		}
 	}
 }

@@ -5,7 +5,7 @@ export class InvalidProductReviewCommentError extends BadRequestError {
 		super(InvalidProductReviewCommentError.message({ value }))
 	}
 
-	static message(arg0: { value: string }): string | undefined {
-		throw new Error('Method not implemented.')
+	static message(props: { value: string }): string {
+		return `El valor ingresado [${props.value}] no es una reseña de producto válida.`
 	}
 }
