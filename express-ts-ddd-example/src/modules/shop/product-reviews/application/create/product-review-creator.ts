@@ -25,9 +25,11 @@ export class ProductReviewCreator {
 
 		const productReview = ProductReview.fromPrimitives({
 			...request,
-			userName: user.name.value,
-			userProfilePicture: user.profilePicture.value
+			userName: user.nameValue,
+			userProfilePicture: user.profilePictureValue
 		})
+
+		await this.repository.save(productReview)
 	}
 
 	private async validateProductExists(props: { productId: string }) {

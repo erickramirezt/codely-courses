@@ -33,4 +33,16 @@ export class User extends AggregateRoot<UserPrimitives> {
 			profilePicture: this.profilePicture.value
 		}
 	}
+
+	get idValue(): string {
+		return this.id.value
+	}
+
+	get nameValue(): string {
+		return this.name.value
+	}
+
+	get profilePictureValue(): string {
+		return this.profilePicture.value
+	}
 }
