@@ -1,5 +1,0 @@
-export enum BonusReward {
-  ONE_YEAR_FREE_SUBSCRIPTION,
-  TEN_PERCENT_DISCOUNT,
-  ONE_CODELIRA
-}
